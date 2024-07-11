@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+extern bool showOrbits;
+
 void keyPressed(unsigned char key, int x, int y);
 
 #endif // KEYBOARD_HANDLER_H

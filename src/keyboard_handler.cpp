@@ -1,5 +1,6 @@
 #include "keyboard_handler.h"
 
+bool showOrbits = false;
 float cameraDistance = 50.0;
 
 void zoom(bool out)
@@ -33,6 +34,10 @@ void keyPressed(unsigned char key, int x, int y)
   case 'S':
   case 's':
     zoom(true);
+    break;
+  case 'O':
+  case 'o':
+    showOrbits = !showOrbits;
     break;
   default:
     break;

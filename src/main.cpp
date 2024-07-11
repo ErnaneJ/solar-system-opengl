@@ -48,6 +48,17 @@ void drawTexturedSphere(GLuint texture, float radius)
   gluDeleteQuadric(quad);
 }
 
+void drawOrbit(float radius)
+{
+  glBegin(GL_LINE_LOOP);
+  for (int i = 0; i < 360; ++i)
+  {
+    float theta = i * 3.14159f / 180.0f;
+    glVertex3f(radius * cos(theta), 0.0f, radius * sin(theta));
+  }
+  glEnd();
+}
+
 void drawSun()
 {
   glPushMatrix();
@@ -58,6 +69,7 @@ void drawSun()
 
 void drawPlanet(GLuint texture, float orbitRadius, float orbitSpeed, float planetRadius)
 {
+  if(showOrbits) drawOrbit(orbitRadius);
   glPushMatrix();
   glRotatef(rotationAngle * orbitSpeed, 0.0, 1.0, 0.0);
   glTranslatef(orbitRadius, 0.0, 0.0);
