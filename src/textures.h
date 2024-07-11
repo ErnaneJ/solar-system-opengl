@@ -8,7 +8,7 @@
 #define MARS_TEXTURE "../assets/textures/mars.jpg"
 #define JUPITER_TEXTURE "../assets/textures/jupiter.jpg"
 #define SATURN_TEXTURE "../assets/textures/saturn.jpg"
-#define URANUS_TEXTURE "../assets/textures/uranus.jpeg"
-#define NEPTUNE_TEXTURE "../assets/textures/neptune.jpeg"
+#define URANUS_TEXTURE "../assets/textures/uranus.jpg"
+#define NEPTUNE_TEXTURE "../assets/textures/neptune.jpg"
 
 #endif // TEXTURES_H

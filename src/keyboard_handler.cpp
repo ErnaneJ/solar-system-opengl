@@ -2,6 +2,7 @@
 
 bool showOrbits = false;
 float cameraDistance = 50.0;
+int selectedElement = -1;
 
 void zoom(bool out)
 {
@@ -38,6 +39,46 @@ void keyPressed(unsigned char key, int x, int y)
   case 'O':
   case 'o':
     showOrbits = !showOrbits;
+    break;
+  case '0':
+    cameraDistance = 10;
+    selectedElement = 0;
+    break;
+  case '1':
+    cameraDistance = 10;
+    selectedElement = 1;
+    break;
+  case '2':
+    cameraDistance = 10;
+    selectedElement = 2;
+    break;
+  case '3':
+    cameraDistance = 10;
+    selectedElement = 3;
+    break;
+  case '4':
+    cameraDistance = 10;
+    selectedElement = 4;
+    break;
+  case '5': 
+    cameraDistance = 10;
+    selectedElement = 5;
+    break;
+  case '6':
+    cameraDistance = 10;
+    selectedElement = 6;
+    break;
+  case '7':
+    cameraDistance = 10;
+    selectedElement = 7;
+    break;
+  case '8':
+    cameraDistance = 10;
+    selectedElement = 8;
+    break;
+  case 'a':
+  case 'A':
+    selectedElement = -1;
     break;
   default:
     break;

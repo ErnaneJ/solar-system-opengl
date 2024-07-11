@@ -22,6 +22,30 @@
 GLuint sunTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture;
 float rotationAngle = 0.0;
 
+
+void printCommandMenu() {
+  std::cout << "\n--------------------------------------\n";
+  std::cout << "🌌 Solar System Simulation Commands 🌌\n";
+  std::cout << "--------------------------------------\n";
+  std::cout << "❌ Quit: press 'ESC'\n";
+  std::cout << "🔄 Toggle orbits: press 'o'\n";
+  std::cout << "🔍 Zoom in: press 'w'\n";
+  std::cout << "🔎 Zoom out: press 's'\n";
+  std::cout << "🖱️ Move camera: press and hold the left mouse button and drag\n";
+  std::cout << "🌍 View individual element:\n";
+  std::cout << "  0️⃣ SUN\n";
+  std::cout << "  1️⃣ MERCURY\n";
+  std::cout << "  2️⃣ VENUS\n";
+  std::cout << "  3️⃣ EARTH\n";
+  std::cout << "  4️⃣ MARS\n";
+  std::cout << "  5️⃣ JUPITER\n";
+  std::cout << "  6️⃣ SATURN\n";
+  std::cout << "  7️⃣ URANUS\n";
+  std::cout << "  8️⃣ NEPTUNE\n";
+  std::cout << "📝 Show/hide names: press 'n'\n";
+  std::cout << "\n--------------------------------------\n";
+}
+
 void init()
 {
   glEnable(GL_TEXTURE_2D);
@@ -37,7 +61,10 @@ void init()
   saturnTexture = loadTexture(SATURN_TEXTURE);
   uranusTexture = loadTexture(URANUS_TEXTURE);
   neptuneTexture = loadTexture(NEPTUNE_TEXTURE);
+
+  printCommandMenu();
 }
+
 
 void drawTexturedSphere(GLuint texture, float radius)
 {
@@ -67,14 +94,15 @@ void drawSun()
   glPopMatrix();
 }
 
-void drawPlanet(GLuint texture, float orbitRadius, float orbitSpeed, float planetRadius)
-{
-  if(showOrbits) drawOrbit(orbitRadius);
-  glPushMatrix();
-  glRotatef(rotationAngle * orbitSpeed, 0.0, 1.0, 0.0);
-  glTranslatef(orbitRadius, 0.0, 0.0);
-  drawTexturedSphere(texture, planetRadius);
-  glPopMatrix();
+void drawPlanet(GLuint texture, float orbitRadius, float orbitSpeed, float planetRadius, const char* name) {
+    if(showOrbits) drawOrbit(orbitRadius);
+
+    glPushMatrix();
+    glRotatef(rotationAngle * orbitSpeed, 0.0, 1.0, 0.0);
+    glTranslatef(orbitRadius, 0.0, 0.0);
+    drawTexturedSphere(texture, planetRadius);
+    
+    glPopMatrix();
 }
 
 void display()
@@ -88,16 +116,46 @@ void display()
             0.0, 0.0, 0.0,
             0.0, 1.0, 0.0);
 
-  drawSun();
-
-  drawPlanet(mercuryTexture, MERCURY_ORBIT_RADIUS, MERCURY_SPEED, MERCURY_RADIUS);
-  drawPlanet(venusTexture, VENUS_ORBIT_RADIUS, VENUS_SPEED, VENUS_RADIUS);
-  drawPlanet(earthTexture, EARTH_ORBIT_RADIUS, EARTH_SPEED, EARTH_RADIUS);
-  drawPlanet(marsTexture, MARS_ORBIT_RADIUS, MARS_SPEED, MARS_RADIUS);
-  drawPlanet(jupiterTexture, JUPITER_ORBIT_RADIUS, JUPITER_SPEED, JUPITER_RADIUS);
-  drawPlanet(saturnTexture, SATURN_ORBIT_RADIUS, SATURN_SPEED, SATURN_RADIUS);
-  drawPlanet(uranusTexture, URANUS_ORBIT_RADIUS, URANUS_SPEED, URANUS_RADIUS);
-  drawPlanet(neptuneTexture, NEPTUNE_ORBIT_RADIUS, NEPTUNE_SPEED, NEPTUNE_RADIUS);
+  switch (selectedElement) {
+  case 0:
+    drawSun();
+    break;
+  case 1:
+    drawPlanet(mercuryTexture, 0, 4.0, MERCURY_RADIUS, "MERCURY");
+    break;
+  case 2:
+    drawPlanet(venusTexture, 0, 3.0, VENUS_RADIUS, "VENUS");
+    break;
+  case 3:
+    drawPlanet(earthTexture, 0, 2.0, EARTH_RADIUS, "EARTH");
+    break;
+  case 4:
+    drawPlanet(marsTexture, 0, 1.5, MARS_RADIUS, "MARS");
+    break;
+  case 5:
+    drawPlanet(jupiterTexture, 0, 1.0, JUPITER_RADIUS, "JUPITER");
+    break;
+  case 6:
+    drawPlanet(saturnTexture, 0, 0.8, SATURN_RADIUS, "SATURN");
+    break;
+  case 7:
+    drawPlanet(uranusTexture, 0, 0.6, URANUS_RADIUS, "URANUS");
+    break;
+  case 8:
+    drawPlanet(neptuneTexture, 0, 0.5, NEPTUNE_RADIUS, "NEPTUNE");
+    break;
+  default:
+    drawSun();
+    drawPlanet(mercuryTexture, MERCURY_ORBIT_RADIUS, 4.0, MERCURY_RADIUS, "MERCURY");
+    drawPlanet(venusTexture, VENUS_ORBIT_RADIUS, 3.0, VENUS_RADIUS, "VENUS");
+    drawPlanet(earthTexture, EARTH_ORBIT_RADIUS, 2.0, EARTH_RADIUS, "EARTH");
+    drawPlanet(marsTexture, MARS_ORBIT_RADIUS, 1.5, MARS_RADIUS, "MARS");
+    drawPlanet(jupiterTexture, JUPITER_ORBIT_RADIUS, 1.0, JUPITER_RADIUS, "JUPITER");
+    drawPlanet(saturnTexture, SATURN_ORBIT_RADIUS, 0.8, SATURN_RADIUS, "SATURN");
+    drawPlanet(uranusTexture, URANUS_ORBIT_RADIUS, 0.6, URANUS_RADIUS, "URANUS");
+    drawPlanet(neptuneTexture, NEPTUNE_ORBIT_RADIUS, 0.5, NEPTUNE_RADIUS, "NEPTUNE");
+    break;
+  }
 
   glutSwapBuffers();
 }
