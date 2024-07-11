@@ -1,9 +1,7 @@
 # Solar System - OpenGL
 
-```
+```bash
 cd build
 cmake ..
-cmake --build .
-make 
-bin/main
+cmake --build . && ../bin/main
 ```

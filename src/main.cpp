@@ -10,15 +10,17 @@
 #endif
 
 #include "stb_image.h"
-#include "texture_loader.h"
 #include "textures.h"
-#include "orbit_radii.h"
 #include "planet_radii.h"
+#include "orbit_radii.h"
+#include "planet_speeds.h"
 
+#include "texture_loader.cpp"
+#include "mouse_handler.cpp"
+#include "keyboard_handler.cpp"
+
+GLuint sunTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture;
 float rotationAngle = 0.0;
-GLuint sunTexture, mercuryTexture, venusTexture,
-    earthTexture, marsTexture, jupiterTexture, saturnTexture,
-    uranusTexture, neptuneTexture;
 
 void init()
 {
@@ -68,18 +70,22 @@ void display()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
-  gluLookAt(0.0, 0.0, 50.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  gluLookAt(cameraDistance * cos(cameraAngleY) * sin(cameraAngleX),
+            cameraDistance * sin(cameraAngleY),
+            cameraDistance * cos(cameraAngleY) * cos(cameraAngleX),
+            0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0);
 
   drawSun();
 
-  drawPlanet(mercuryTexture, MERCURY_ORBIT_RADIUS, 4.0, MERCURY_RADIUS);
-  drawPlanet(venusTexture, VENUS_ORBIT_RADIUS, 3.0, VENUS_RADIUS);
-  drawPlanet(earthTexture, EARTH_ORBIT_RADIUS, 2.0, EARTH_RADIUS);
-  drawPlanet(marsTexture, MARS_ORBIT_RADIUS, 1.5, MARS_RADIUS);
-  drawPlanet(jupiterTexture, JUPITER_ORBIT_RADIUS, 1.0, JUPITER_RADIUS);
-  drawPlanet(saturnTexture, SATURN_ORBIT_RADIUS, 0.8, SATURN_RADIUS);
-  drawPlanet(uranusTexture, URANUS_ORBIT_RADIUS, 0.6, URANUS_RADIUS);
-  drawPlanet(neptuneTexture, NEPTUNE_ORBIT_RADIUS, 0.5, NEPTUNE_RADIUS);
+  drawPlanet(mercuryTexture, MERCURY_ORBIT_RADIUS, MERCURY_SPEED, MERCURY_RADIUS);
+  drawPlanet(venusTexture, VENUS_ORBIT_RADIUS, VENUS_SPEED, VENUS_RADIUS);
+  drawPlanet(earthTexture, EARTH_ORBIT_RADIUS, EARTH_SPEED, EARTH_RADIUS);
+  drawPlanet(marsTexture, MARS_ORBIT_RADIUS, MARS_SPEED, MARS_RADIUS);
+  drawPlanet(jupiterTexture, JUPITER_ORBIT_RADIUS, JUPITER_SPEED, JUPITER_RADIUS);
+  drawPlanet(saturnTexture, SATURN_ORBIT_RADIUS, SATURN_SPEED, SATURN_RADIUS);
+  drawPlanet(uranusTexture, URANUS_ORBIT_RADIUS, URANUS_SPEED, URANUS_RADIUS);
+  drawPlanet(neptuneTexture, NEPTUNE_ORBIT_RADIUS, NEPTUNE_SPEED, NEPTUNE_RADIUS);
 
   glutSwapBuffers();
 }
@@ -92,46 +98,34 @@ void reshape(int w, int h)
   gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 200.0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glTranslatef(0.0, 0.0, -50.0);
 }
 
 void update(int value)
 {
   rotationAngle += 0.5;
-  if (rotationAngle > 360.0)
-    rotationAngle -= 360.0;
 
   glutPostRedisplay();
   glutTimerFunc(16, update, 0);
-}
-
-void keyPressed(unsigned char key, int x, int y)
-{
-  switch (key)
-  {
-  case 27: // ESC
-    exit(0);
-    break;
-  default:
-    break;
-  }
 }
 
 int main(int argc, char **argv)
 {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize(800, 600);
-  glutInitWindowPosition(100, 100);
+  glutInitWindowSize(1000, 800);
+  glutInitWindowPosition(250, 100);
   glutCreateWindow("Solar System");
 
   init();
 
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
-  glutTimerFunc(16, update, 0);
+  glutTimerFunc(16, update, 0); // 60 FPS
 
   glutKeyboardFunc(keyPressed);
+
+  glutMotionFunc(mouseMotion);
+  glutMouseFunc(mouseButton);
 
   glutMainLoop();
   return 0;
