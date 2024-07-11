@@ -13,6 +13,7 @@ extern bool showOrbits;
 extern float cameraDistance;
 extern float zoomExcess;
 extern int selectedElement;
+extern bool paused;
 
 void keyPressed(unsigned char key, int x, int y);
 

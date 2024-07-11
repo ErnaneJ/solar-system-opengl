@@ -3,6 +3,7 @@
 bool showOrbits = false;
 float cameraDistance = 50.0;
 int selectedElement = -1;
+bool paused = false;
 
 void zoom(bool out)
 {
@@ -79,6 +80,10 @@ void keyPressed(unsigned char key, int x, int y)
   case 'a':
   case 'A':
     selectedElement = -1;
+    break;
+  case 'p':
+  case 'P':
+    paused = !paused;
     break;
   default:
     break;
