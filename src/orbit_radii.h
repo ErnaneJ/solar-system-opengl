@@ -1,7 +1,6 @@
 #ifndef ORBIT_RADII_H
 #define ORBIT_RADII_H
 
-// Constants for the radii of the planets orbits
 const float MERCURY_ORBIT_RADIUS = 5.0;
 const float VENUS_ORBIT_RADIUS = 8.0;
 const float EARTH_ORBIT_RADIUS = 11.0;

@@ -1,7 +1,6 @@
 #ifndef PLANET_RADII_H
 #define PLANET_RADII_H
 
-// Constants for the radii of planets
 const float SUN_RADIUS = 2.0;
 const float MERCURY_RADIUS = 0.2;
 const float VENUS_RADIUS = 0.4;

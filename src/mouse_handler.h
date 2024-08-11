@@ -16,6 +16,5 @@ extern bool leftButtonPressed;
 
 void mouseMotion(int x, int y);
 void mouseButton(int button, int state, int x, int y);
-void mouseWheel(int button, int dir, int x, int y);
 
 #endif // MOUSE_HANDLER_H

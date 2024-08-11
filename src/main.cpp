@@ -33,6 +33,7 @@ void printCommandMenu()
   std::cout << "🔎 Zoom out: press 's'\n";
   std::cout << "⏸️ Pause animation: press 'p'\n";
   std::cout << "🖱️ Move camera: press and hold the left mouse button and drag\n";
+  std::cout << "🌐 View all elements: press 'A'\n";
   std::cout << "🌍 View individual element:\n";
   std::cout << "  0️⃣ SUN\n";
   std::cout << "  1️⃣ MERCURY\n";
@@ -44,7 +45,7 @@ void printCommandMenu()
   std::cout << "  7️⃣ URANUS\n";
   std::cout << "  8️⃣ NEPTUNE\n";
   std::cout << "\n--------------------------------------\n";
-}
+};
 
 void init()
 {
@@ -64,16 +65,17 @@ void init()
   saturnRingTexture = loadTexture(SATURN_RING_TEXTURE);
 
   printCommandMenu();
-}
+};
 
 void drawTexturedSphere(GLuint texture, float radius)
 {
+  glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
   GLUquadric *quad = gluNewQuadric();
   gluQuadricTexture(quad, GL_TRUE);
   glBindTexture(GL_TEXTURE_2D, texture);
   gluSphere(quad, radius, 36, 18);
   gluDeleteQuadric(quad);
-}
+};
 
 void drawOrbit(float radius)
 {
@@ -84,58 +86,85 @@ void drawOrbit(float radius)
     glVertex3f(radius * cos(theta), 0.0f, radius * sin(theta));
   }
   glEnd();
-}
+};
 
 void drawSun(bool withLighting)
 {
-  if(!withLighting) {
+  if (!withLighting)
+  {
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
     return;
   }
 
-
   glPushMatrix();
   glRotatef(rotationAngle, 0.0, 1.0, 0.0);
   drawTexturedSphere(sunTexture, SUN_RADIUS);
   glPopMatrix();
-
-  // GLfloat no_emission[] = { 0.0, 0.0, 0.0, 1.0 };
-  // glMaterialfv(GL_FRONT, GL_EMISSION, no_emission);
-}
+};
 
 void drawSaturnRing(float innerRadius, float outerRadius)
 {
-  GLUquadric* quad = gluNewQuadric();
-  glBindTexture(GL_TEXTURE_2D, saturnRingTexture);
+  int numDisks = 25;
+  GLUquadric *quad = gluNewQuadric();
+  glBindTexture(GL_TEXTURE_2D, saturnTexture);
   gluQuadricTexture(quad, GL_TRUE);
 
-  glPushMatrix();
-  glRotatef(-90.0, 1.0, 0.0, 0.0); // Alinhar o anel no plano correto
-  gluDisk(quad, innerRadius, outerRadius, 64, 64); // Desenhar o disco com textura
-  glPopMatrix();
+  // Ativar o blending para permitir a transparência
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  // Calcular a diferença de raio entre cada disco
+  float radiusStep = (outerRadius - innerRadius) / numDisks;
+
+  for (int i = 0; i < numDisks; ++i)
+  {
+    float offset = 0.0;
+    if (i % 2 == 0)
+    {
+      offset = .5;
+    }
+    // Calcular o raio interno e externo para o disco atual
+    float currentInnerRadius = innerRadius + i * radiusStep + offset;
+    float currentOuterRadius = currentInnerRadius + radiusStep;
+
+    // Calcular a opacidade baseada na posição do disco
+    float alpha = (float)i / (float)(numDisks - 1); // Varia de 0 (preto) a 1 (cor da textura)
+
+    // Definir a cor para o disco atual (com opacidade)
+    glColor4f(1.0f, 1.0f, 1.0f, alpha);
+
+    // Desenhar o disco
+    glPushMatrix();
+    glRotatef(10.0f, 1.0f, 0.0f, 0.0f);
+    gluDisk(quad, currentInnerRadius, currentOuterRadius, 64, 64);
+    glPopMatrix();
+  }
+
+  // Desativar o blending após o desenho
+  glDisable(GL_BLEND);
 
   gluDeleteQuadric(quad);
-}
-
+};
 
 void drawPlanet(GLuint texture, float orbitRadius, float orbitSpeed, float planetRadius, const char *name, bool hasRing = false, float innerRingRadius = 0.0f, float outerRingRadius = 0.0f)
 {
-    if (showOrbits)
-        drawOrbit(orbitRadius);
+  if (showOrbits)
+    drawOrbit(orbitRadius);
 
-    glPushMatrix();
-    glRotatef(rotationAngle * orbitSpeed, 0.0, 1.0, 0.0);
-    glTranslatef(orbitRadius, 0.0, 0.0);
-    drawTexturedSphere(texture, planetRadius);
+  glPushMatrix();
+  glRotatef(rotationAngle * orbitSpeed, 0.0, 1.0, 0.0);
+  glTranslatef(orbitRadius, 0.0, 0.0);
+  drawTexturedSphere(texture, planetRadius);
 
-    if (hasRing)
-    {
-        drawSaturnRing(innerRingRadius, outerRingRadius);
-    }
+  if (hasRing)
+  {
+    drawSaturnRing(innerRingRadius, outerRingRadius);
+  }
 
-    glPopMatrix();
-}
+  glPopMatrix();
+};
+
 void display()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -191,14 +220,14 @@ void display()
     drawPlanet(earthTexture, EARTH_ORBIT_RADIUS, EARTH_SPEED, EARTH_RADIUS, "EARTH");
     drawPlanet(marsTexture, MARS_ORBIT_RADIUS, MARS_SPEED, MARS_RADIUS, "MARS");
     drawPlanet(jupiterTexture, JUPITER_ORBIT_RADIUS, JUPITER_SPEED, JUPITER_RADIUS, "JUPITER");
-    drawPlanet(saturnTexture, SATURN_ORBIT_RADIUS, SATURN_SPEED, SATURN_RADIUS, "SATURN");
+    drawPlanet(saturnTexture, SATURN_ORBIT_RADIUS, SATURN_SPEED, SATURN_RADIUS, "SATURN", true, SATURN_RADIUS * 1.2f, SATURN_RADIUS * 2.0f);
     drawPlanet(uranusTexture, URANUS_ORBIT_RADIUS, URANUS_SPEED, URANUS_RADIUS, "URANUS");
     drawPlanet(neptuneTexture, NEPTUNE_ORBIT_RADIUS, NEPTUNE_SPEED, NEPTUNE_RADIUS, "NEPTUNE");
     break;
   }
 
   glutSwapBuffers();
-}
+};
 
 void reshape(int w, int h)
 {
@@ -208,11 +237,12 @@ void reshape(int w, int h)
   gluPerspective(45.0, (GLfloat)w / (GLfloat)h, 1.0, 200.0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-}
+};
 
 void update(int value)
 {
-  if(!paused)rotationAngle += 0.5;
+  if (!paused)
+    rotationAngle += 0.5;
 
   glutPostRedisplay();
   glutTimerFunc(16, update, 0);
@@ -238,5 +268,6 @@ int main(int argc, char **argv)
   glutMouseFunc(mouseButton);
 
   glutMainLoop();
+  
   return 0;
-}
+};
