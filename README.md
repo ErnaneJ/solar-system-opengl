@@ -1,4 +1,4 @@
-# 🌌 Solar System Simulation - OpenGL
+# 🌌 Solar System - OpenGL
 
 This project showcases a 3D visualization of the solar system using OpenGL with C/C++. The goal was to create an interactive representation of celestial bodies, including the Sun, planets, and Saturn's rings. The project demonstrates OpenGL’s capabilities for dynamic and visually rich simulations, allowing users to explore planetary orbits and characteristics.
 
