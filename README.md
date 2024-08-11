@@ -4,7 +4,7 @@ This project showcases a 3D visualization of the solar system using OpenGL with 
 
 ## Features
 
-- **3D Visualization**: Realistic rendering of celestial bodies.
+- **3D Visualization**: Rendering of celestial bodies.
 - **Interactive Exploration**: Navigate the solar system and zoom in/out.
 - **Dynamic Animation**: Planetary orbits and movement simulation.
 - **Textured Models**: Detailed textures for each planet and the Sun.
