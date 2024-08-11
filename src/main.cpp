@@ -1,3 +1,12 @@
+/**
+ * @file main.cpp
+ * @brief Main entry point for the Solar System simulation application.
+ *
+ * This file contains the main function and the core rendering logic for
+ * the Solar System simulation, including initialization, drawing, and
+ * updating the scene. It also handles user input via keyboard and mouse.
+ */
+
 #define GL_SILENCE_DEPRECATION
 
 #include <iostream>
@@ -22,6 +31,13 @@
 GLuint sunTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, saturnRingTexture, uranusTexture, neptuneTexture;
 float rotationAngle = 0.0;
 
+/**
+ * @brief Prints the command menu for user instructions.
+ *
+ * This function prints a menu of commands to the console, providing users
+ * with information on how to control the simulation using keyboard and
+ * mouse inputs.
+ */
 void printCommandMenu()
 {
   std::cout << "\n--------------------------------------\n";
@@ -47,6 +63,13 @@ void printCommandMenu()
   std::cout << "\n--------------------------------------\n";
 };
 
+/**
+ * @brief Initializes OpenGL settings and loads textures.
+ *
+ * This function sets up OpenGL settings, such as enabling texture mapping
+ * and depth testing. It also loads textures for all celestial bodies and
+ * prints the command menu.
+ */
 void init()
 {
   glEnable(GL_TEXTURE_2D);
@@ -67,6 +90,14 @@ void init()
   printCommandMenu();
 };
 
+/**
+ * @brief Draws a textured sphere with the given texture and radius.
+ * @param texture The texture to apply to the sphere.
+ * @param radius The radius of the sphere.
+ *
+ * This function draws a textured sphere using the specified texture and
+ * radius, representing a celestial body.
+ */
 void drawTexturedSphere(GLuint texture, float radius)
 {
   glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
@@ -77,6 +108,13 @@ void drawTexturedSphere(GLuint texture, float radius)
   gluDeleteQuadric(quad);
 };
 
+/**
+ * @brief Draws an orbit with the given radius.
+ * @param radius The radius of the orbit.
+ *
+ * This function draws a circular orbit using line loops, representing
+ * the path on which a planet revolves around a star.
+ */
 void drawOrbit(float radius)
 {
   glBegin(GL_LINE_LOOP);
@@ -88,6 +126,14 @@ void drawOrbit(float radius)
   glEnd();
 };
 
+/**
+ * @brief Draws the sun with optional lighting.
+ * @param withLighting If true, lighting effects are enabled; otherwise, they are disabled.
+ *
+ * This function draws the sun using the sun texture. It also applies a
+ * rotation based on the current rotation angle. Lighting effects are applied
+ * if specified.
+ */
 void drawSun(bool withLighting)
 {
   if (!withLighting)
@@ -103,6 +149,14 @@ void drawSun(bool withLighting)
   glPopMatrix();
 };
 
+/**
+ * @brief Draws Saturn's rings.
+ * @param innerRadius The inner radius of the rings.
+ * @param outerRadius The outer radius of the rings.
+ *
+ * This function draws Saturn's rings as a series of textured disks. The
+ * transparency and spacing of the disks create the appearance of rings.
+ */
 void drawSaturnRing(float innerRadius, float outerRadius)
 {
   int numDisks = 25;
@@ -110,11 +164,9 @@ void drawSaturnRing(float innerRadius, float outerRadius)
   glBindTexture(GL_TEXTURE_2D, saturnTexture);
   gluQuadricTexture(quad, GL_TRUE);
 
-  // Ativar o blending para permitir a transparência
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  // Calcular a diferença de raio entre cada disco
   float radiusStep = (outerRadius - innerRadius) / numDisks;
 
   for (int i = 0; i < numDisks; ++i)
@@ -124,29 +176,38 @@ void drawSaturnRing(float innerRadius, float outerRadius)
     {
       offset = .5;
     }
-    // Calcular o raio interno e externo para o disco atual
     float currentInnerRadius = innerRadius + i * radiusStep + offset;
     float currentOuterRadius = currentInnerRadius + radiusStep;
 
-    // Calcular a opacidade baseada na posição do disco
-    float alpha = (float)i / (float)(numDisks - 1); // Varia de 0 (preto) a 1 (cor da textura)
+    float alpha = (float)i / (float)(numDisks - 1);
 
-    // Definir a cor para o disco atual (com opacidade)
     glColor4f(1.0f, 1.0f, 1.0f, alpha);
 
-    // Desenhar o disco
     glPushMatrix();
     glRotatef(10.0f, 1.0f, 0.0f, 0.0f);
     gluDisk(quad, currentInnerRadius, currentOuterRadius, 64, 64);
     glPopMatrix();
   }
 
-  // Desativar o blending após o desenho
   glDisable(GL_BLEND);
 
   gluDeleteQuadric(quad);
 };
 
+/**
+ * @brief Draws a planet with the specified parameters.
+ * @param texture The texture to apply to the planet.
+ * @param orbitRadius The radius of the planet's orbit around the sun.
+ * @param orbitSpeed The speed of the planet's orbit.
+ * @param planetRadius The radius of the planet.
+ * @param name The name of the planet (for logging purposes).
+ * @param hasRing If true, a ring is drawn around the planet (default is false).
+ * @param innerRingRadius The inner radius of the ring (default is 0.0f).
+ * @param outerRingRadius The outer radius of the ring (default is 0.0f).
+ *
+ * This function draws a planet with the specified texture and radius, and
+ * optionally draws a ring around the planet if specified.
+ */
 void drawPlanet(GLuint texture, float orbitRadius, float orbitSpeed, float planetRadius, const char *name, bool hasRing = false, float innerRingRadius = 0.0f, float outerRingRadius = 0.0f)
 {
   if (showOrbits)
@@ -165,6 +226,13 @@ void drawPlanet(GLuint texture, float orbitRadius, float orbitSpeed, float plane
   glPopMatrix();
 };
 
+/**
+ * @brief Displays the current frame.
+ *
+ * This function clears the color and depth buffers, sets up the camera
+ * view, and draws all celestial bodies based on the current state. It also
+ * handles the selection of individual planets or the entire solar system.
+ */
 void display()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -229,6 +297,14 @@ void display()
   glutSwapBuffers();
 };
 
+/**
+ * @brief Handles window resizing events.
+ * @param w The new width of the window.
+ * @param h The new height of the window.
+ *
+ * This function adjusts the viewport and projection matrix when the window
+ * is resized to ensure the correct aspect ratio and perspective.
+ */
 void reshape(int w, int h)
 {
   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -239,6 +315,14 @@ void reshape(int w, int h)
   glLoadIdentity();
 };
 
+/**
+ * @brief Updates the simulation state.
+ * @param value Unused parameter for timer function.
+ *
+ * This function updates the rotation angle for animation and schedules
+ * the next update call. It also checks if the simulation is paused or
+ * running.
+ */
 void update(int value)
 {
   if (!paused)
@@ -246,8 +330,18 @@ void update(int value)
 
   glutPostRedisplay();
   glutTimerFunc(16, update, 0);
-}
+};
 
+/**
+ * @brief Main entry point for the application.
+ * @param argc The number of command-line arguments.
+ * @param argv The command-line arguments.
+ * @return 0 on successful execution.
+ *
+ * This function initializes GLUT, sets up the window, and registers
+ * callback functions for display, reshape, keyboard, and mouse events.
+ * It then enters the GLUT main loop.
+ */
 int main(int argc, char **argv)
 {
   glutInit(&argc, argv);
@@ -268,6 +362,6 @@ int main(int argc, char **argv)
   glutMouseFunc(mouseButton);
 
   glutMainLoop();
-  
+
   return 0;
 };

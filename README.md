@@ -62,16 +62,16 @@ cmake --build . && ../bin/main
 
 |Earth Texture|Jupiter Texture|Mars Texture|
 |:-:|:-:|:-:|
-|![Earth Texture](assets/textures/earth.jpg)|![Jupiter Texture](assets/textures/jupiter.jpg)|![Mars Texture](assets/textures/mars.jpg)|
+|![Earth Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/earth.jpg)|![Jupiter Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/jupiter.jpg)|![Mars Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/mars.jpg)|
 
 |Mercury Texture|Neptune Texture|Saturn Texture|
 |:-:|:-:|:-:|
-|![Mercury Texture](assets/textures/mercury.jpg)|![Neptune Texture](assets/textures/neptune.jpg)|![Saturn Texture](assets/textures/saturn.jpg)|
+|![Mercury Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/mercury.jpg)|![Neptune Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/neptune.jpg)|![Saturn Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/saturn.jpg)|
 
 |Sun Texture|Uranus Texture|Venus Texture|
 |:-:|:-:|:-:|
-|![Sun Texture](assets/textures/sun.jpg)|![Uranus Texture](assets/textures/uranus.jpg)|![Venus Texture](assets/textures/venus.jpg)|
+|![Sun Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/sun.jpg)|![Uranus Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/uranus.jpg)|![Venus Texture](https://raw.githubusercontent.com/ErnaneJ/solar-system-opengl/main/assets/textures/venus.jpg)|
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.

@@ -1,0 +1,16 @@
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "Solar System OpenGL"
+PROJECT_NUMBER         = "v1.0.0"
+OUTPUT_DIRECTORY       = docs
+HTML_OUTPUT            = .
+OUTPUT_LANGUAGE        = English
+GENERATE_LATEX         = NO
+BUILTIN_STL_SUPPORT    = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+INPUT                  = ./
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+GENERATE_TREEVIEW      = YES
+RECURSIVE              = YES
